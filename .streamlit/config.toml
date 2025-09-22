@@ -1,10 +1,14 @@
 [theme]
-base = "light"
-# Minimalist warm Pantone-inspired palette (balanced, unique)
-primaryColor = "#FF8A5B"               # Warm coral/peach accent
-backgroundColor = "#F7F5F2"            # Warm off-white (paper)
-secondaryBackgroundColor = "#EFEAE4"    # Soft warm panel
-textColor = "#1C1A18"                  # Deep warm ink
+base = "dark"
+# Joel Maisel Palette
+# Navy Blazer — #373B4B (deep navy) -> background
+# Rifle Green — #444C38 (dark muted green) -> panels
+# Crystal Teal — #3BB7B7 (bluish-green) -> primary accent
+# Pomegranate — #B32727 (rich red) -> secondary accent/warn
+primaryColor = "#3BB7B7"
+backgroundColor = "#373B4B"
+secondaryBackgroundColor = "#444C38"
+textColor = "#EAECEF"  # neutral light for readability
 font = "sans serif"
 
 [server]
