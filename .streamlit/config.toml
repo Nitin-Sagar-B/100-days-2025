@@ -1,9 +1,15 @@
 [theme]
 base = "dark"
-primaryColor = "#7c5cff"
-backgroundColor = "#0f1114"
-secondaryBackgroundColor = "#121318"
-textColor = "#e5e7eb"
+# Minimalist Pantone-inspired dark palette
+# Accent inspired by Pantone's "Peach Fuzz" family for approachable warmth
+primaryColor = "#FFBE98"
+# Deep cool background with slight blue hue for contrast and low eye strain
+backgroundColor = "#0B0F14"
+# Slightly lifted panels against the background
+secondaryBackgroundColor = "#12161D"
+# Soft off-white for high readability on dark
+textColor = "#E6E7EB"
+font = "sans serif"
 
 [server]
 headless = true
