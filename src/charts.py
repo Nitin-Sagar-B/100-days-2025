@@ -5,20 +5,21 @@ import plotly.graph_objects as go
 import pandas as pd
 
 # Define a minimalist dark template and consistent colorway aligned with the app theme
-PANTONE_DARK_BG = "#F7F5F2"
-PANTONE_DARK_FG = "#1C1A18"
-PANTONE_PANEL = "#EFEAE4"
-PANTONE_ACCENT = "#FF8A5B"
+# Complementary minimalist dark palette for visualizations
+PANTONE_DARK_BG = "#0D1117"   # deep graphite/navy (GitHub dark-esque)
+PANTONE_DARK_FG = "#E6E7EB"   # soft light ink for legibility
+PANTONE_PANEL = "#0F141B"     # slightly lifted panel
+PANTONE_ACCENT = "#FF8A5B"    # keep warm coral as primary accent
 COLORWAY = [
     PANTONE_ACCENT,    # warm coral
-    "#F2C94C",        # warm amber
-    "#2BB673",        # green (balanced)
-    "#6C5CE7",        # muted violet
-    "#00B8D9",        # cyan accent (sparingly)
+    "#7DD3FC",        # ice blue
+    "#C084FC",        # lilac
+    "#34D399",        # teal/green
+    "#FBBF24",        # amber
 ]
 
 BASE_LAYOUT = dict(
-    template="plotly_white",
+    template="plotly_dark",
     paper_bgcolor=PANTONE_DARK_BG,
     plot_bgcolor=PANTONE_PANEL,
     font=dict(color=PANTONE_DARK_FG),
@@ -61,7 +62,7 @@ def calendar_heatmap(df: pd.DataFrame, values: pd.Series) -> go.Figure:
     x["week"] = x["date"].dt.isocalendar().week
     pivot = x.pivot_table(index="dow", columns="week", values=col, aggfunc="mean")
     # A warm-to-cool minimalist scale aligned with the palette
-    heat_scale = [(0.0, "#F1EFEC"), (0.5, "#E7E2DB"), (1.0, PANTONE_ACCENT)]
+    heat_scale = [(0.0, "#1F2937"), (0.5, "#374151"), (1.0, PANTONE_ACCENT)]
     fig = px.imshow(pivot, aspect="auto", color_continuous_scale=heat_scale)
     fig.update_layout(coloraxis_showscale=True, **BASE_LAYOUT)
     fig.update_yaxes(title="Day of Week")
