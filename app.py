@@ -17,22 +17,21 @@ st.markdown(
 
 st.info("Use the sidebar to navigate pages: Dashboard, Calendar, Analytics, Data & Export.")
 
-# Subtle CSS nudge to align Streamlit base with our theme tokens (no heavy overrides)
+# Force Streamlit built-in theme variables so viewer settings cannot override our palette
 st.markdown(
         """
         <style>
         :root {
-            --accent: #FFBE98;
-            --bg: #0B0F14;
-            --bg2: #12161D;
-            --text: #E6E7EB;
+            --primary-color: #FFBE98;
+            --background-color: #0B0F14;
+            --secondary-background-color: #12161D;
+            --text-color: #E6E7EB;
+            --font: sans-serif;
         }
-        .stApp { background-color: var(--bg) !important; }
-        .stMarkdown, .stText, .stNumberInput, .stSelectbox, .stDateInput, label, .css-10trblm, .css-1d391kg {
-            color: var(--text) !important;
-        }
-        .stButton>button, .stDownloadButton>button { background: var(--accent) !important; color: #0A0C0F !important; border: 0; }
-        .stTabs [data-baseweb="tab"] { color: var(--text); }
+        html, body, .stApp { background-color: var(--background-color) !important; color: var(--text-color) !important; }
+        .stButton>button, .stDownloadButton>button { background: var(--primary-color) !important; color: #0A0C0F !important; border: 0; }
+        .stTabs [data-baseweb=\"tab\"] { color: var(--text-color) !important; }
+        .stSidebar, section[data-testid=\"stSidebar\"] { background-color: var(--secondary-background-color) !important; }
         </style>
         """,
         unsafe_allow_html=True,
