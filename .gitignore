@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.db-wal
+*.db-shm
+.env
+.env.*
+.venv/
+env/
+.envrc
+*.sqlite3
+
+# VSCode
+.vscode/
+
+# Data/outputs
+/data/*.csv
+/data/*.json
+/backups/**
+/data/habits.db
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Tests
+/.pytest_cache/
+/.ruff_cache/
+
+# OS
+.DS_Store
+Thumbs.db

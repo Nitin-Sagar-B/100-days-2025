@@ -1,0 +1,217 @@
+{
+  "model": "gpt-5",
+  "venv": "env",
+  "task_name": "Build Streamlit Habit + Productivity Dashboard (last 100 days of 2025)",
+  "summary": "Create a complete, production-ready Streamlit app repository that tracks habits and productivity for the last 100 days of 2025 (Sep 22 → Dec 31, 2025). Must include calendar entry UI, data persistence, interactive charts, a minimalistic dark theme with icons, and export options. Provide sample data, tests, README, and run scripts.",
+  "assumptions": [
+    "The target date range is the last 100 days of 2025: Sep 22, 2025 through Dec 31, 2025 (inclusive).",
+    "User wants to track these fields per day: sugar_intake (grams), water_intake (ml or glasses), fap (count or boolean), productive_hours (float), weight (kg).",
+    "App will run locally (pip + streamlit). No cloud infra required, but code should be cloud-compatible.",
+    "No clarification will be requested — use sensible defaults when ambiguous."
+  ],
+  "hard_requirements": {
+    "language": "Python 3.10+",
+    "framework": "Streamlit (latest stable)",
+    "data_storage": "SQLite by default, CSV fallback (auto-export)",
+    "interactivity": "FullCalendar embedded (via streamlit.components) or a UI calendar with day-click to add/edit events + form fallback",
+    "charts": "Plotly for interactive charts, Altair optional for small charts",
+    "visual_design": "Minimalistic dark theme, accessible color contrast, iconography via Font Awesome or inline SVG, responsive UI",
+    "deliverables": [
+      "Complete repo with working Streamlit app",
+      "requirements.txt",
+      "README.md with run instructions",
+      "sample_data generator script (seed for Sep 22–Dec 31, 2025)",
+      "unit tests for data functions (pytest)",
+      "CI workflow example (GitHub Actions) that runs lint + tests",
+      "Export options: CSV & JSON and 'backup/restore' endpoints",
+      "Well-commented code and docstrings"
+    ]
+  },
+  "ui_spec": {
+    "pages": [
+      {
+        "id": "overview",
+        "title": "Dashboard",
+        "content": "Top-level KPIs (today/selected date): productive_hours, water_intake, sugar_intake, fap_count, weight. Big central calendar heatmap and daily card for that day. Sparkline mini-charts for trends."
+      },
+      {
+        "id": "calendar",
+        "title": "Calendar",
+        "content": "Full month/week calendar with day click -> open modal form to add or edit events. Ability to add multiple events per day. Heatmap layer like GitHub contribution graph for productivity & habit density."
+      },
+      {
+        "id": "analytics",
+        "title": "Analytics",
+        "content": "Weekly visualizations, rolling averages, correlations, streaks, distribution charts, weekly breakdowns, cumulative to-date charts, productivity vs. leisure scatter, weight trend with LOESS / moving average."
+      },
+      {
+        "id": "data",
+        "title": "Data & Export",
+        "content": "Raw table viewer (paginated), download CSV/JSON, manual CSV import, backup/restore."
+      },
+      {
+        "id": "settings",
+        "title": "Settings",
+        "content": "Units toggle (kg/lbs, ml/glasses), default daily goals, icon toggles, theme (default dark), export path."
+      }
+    ],
+    "theme_tokens": {
+      "bg": "#0f1114",
+      "panel": "#121318",
+      "muted": "#8b9096",
+      "accent": "#7c5cff",
+      "success": "#22c55e",
+      "warning": "#f59e0b",
+      "danger": "#ef4444",
+      "glass": "rgba(255,255,255,0.03)"
+    },
+    "icons": {
+      "sugar": "fa-solid fa-candy-cane or inline SVG candy",
+      "water": "fa-solid fa-tint or water drop SVG",
+      "fap": "fa-solid fa-user-secret (or generic personal icon) — use non-explicit icon for privacy",
+      "productive_hours": "fa-solid fa-clock",
+      "weight": "fa-solid fa-weight-scale"
+    },
+    "accessibility": {
+      "colorblind_safe": true,
+      "contrast_ratio": ">=4.5:1 for body text",
+      "keyboard_navigation": true,
+      "aria": "tooltips, labels for charts, alt text for SVG icons"
+    }
+  },
+  "data_schema": {
+    "table": "daily_metrics",
+    "columns": {
+      "date": "DATE (YYYY-MM-DD) PRIMARY KEY",
+      "sugar_intake_g": "INTEGER (grams)",
+      "water_ml": "INTEGER",
+      "fap_count": "INTEGER",
+      "productive_hours": "REAL",
+      "weight_kg": "REAL",
+      "notes": "TEXT (optional)",
+      "created_at": "DATETIME",
+      "updated_at": "DATETIME"
+    },
+    "validation": {
+      "no_future_dates": "reject entries beyond Dec 31, 2025",
+      "ranges": {
+        "sugar_intake_g": "0-1000",
+        "water_l": "0-5",
+        "fap_count": "0-10",
+        "productive_hours": "0-24",
+        "weight_kg": "50-100"
+      }
+    }
+  },
+  "analytics_requirements": {
+    "daily_metrics": [
+      "daily totals",
+      "7-day rolling average",
+      "30-day rolling average",
+      "weekly sums (Mon-Sun) and avg productive_hours per weekday"
+    ],
+    "visualizations": [
+      {
+        "id": "kpi_row",
+        "type": "metric cards",
+        "notes": "show value, delta vs last 7 days, small sparkline"
+      },
+      {
+        "id": "calendar_heatmap",
+        "type": "calendar heatmap",
+        "notes": "color intensity = composite score (normalize productive_hours, water, sugar)"
+      },
+      {
+        "id": "weekly_bar",
+        "type": "stacked bar",
+        "notes": "weekly breakdown of sugar / water / productive_hours"
+      },
+      {
+        "id": "time_series",
+        "type": "interactive time series",
+        "notes": "plotly with range selector, multiple traces selectable"
+      },
+      {
+        "id": "correlation_matrix",
+        "type": "heatmap",
+        "notes": "pearson correlations between fields, clickable cell shows scatter"
+      },
+      {
+        "id": "streaks",
+        "type": "streak indicator",
+        "notes": "compute longest current streak of meeting daily goal (configurable)"
+      },
+      {
+        "id": "weight_trend",
+        "type": "line + LOESS",
+        "notes": "show weight, rolling mean, annotate significant changes (>2% in 7 days)"
+      }
+    ],
+    "interactions": [
+      "hover tooltips with exact values",
+      "click a data point to open day editor",
+      "legend toggles",
+      "date-range picker to filter charts"
+    ]
+  },
+  "persistence_and_import_export": {
+    "default_storage": "SQLite file at data/habits.db",
+    "auto_backup": "weekly CSV backup to backups/ with timestamp",
+    "import": "CSV import with schema validation and preview",
+    "export": "CSV and JSON export for selected date range"
+  },
+  "components_and_libraries": {
+    "python": ["streamlit", "pandas", "numpy", "plotly", "altair", "sqlalchemy", "dataclasses", "python-dateutil"],
+    "ui": ["fontawesome (via CDN)", "streamlit-components (for FullCalendar embed)", "streamlit-aggrid (optional)"],
+    "testing": ["pytest"],
+    "dev": ["black", "ruff", "isort"]
+  },
+  "requirements_txt": "streamlit\npandas\nnumpy\nplotly\naltair\nsqlalchemy\npython-dateutil\nstreamlit-aggrid\npytest\nrequests",
+  "run_instructions": [
+    "pip install -r requirements.txt",
+    "python scripts/seed_sample_data.py --out data/sample_seed.csv --range 2025-09-22:2025-12-31",
+    "streamlit run app.py"
+  ],
+  "sample_data_generation": {
+    "script_behavior": "Generate deterministic (seeded) realistic daily values for Sep 22 - Dec 31, 2025. Use gaussian distributions with daily noise and realistic bounds. Include occasional missing days and outliers. Save to data/sample_seed.csv and optionally seed SQLite.",
+    "columns": ["date","sugar_intake_g","water_ml","fap_count","productive_hours","weight_kg","notes"]
+  },
+  "tests": {
+    "unit_tests": [
+      "test_data_ingest: test CSV -> DB ingestion, schema validation, rejects invalid rows",
+      "test_rolling_avg: verify 7-day and 30-day rolling average calculations",
+      "test_streaks: compute streaks correctly",
+      "test_export_import: roundtrip CSV import/export"
+    ],
+    "ci": "Run tests and lint in .github/workflows/ci.yml"
+  },
+  "code_quality": {
+    "docstrings": "All public functions have docstrings",
+    "typing": "Use type hints for core functions",
+    "logging": "Minimal logging (info/warning) to console",
+    "error_handling": "Graceful messages in UI for DB errors or invalid imports"
+  },
+  "visual_design_notes_for_agent": [
+    "Make visuals minimal but gorgeous: generous spacing, clean typography, subtle shadows, glass panels.",
+    "Default layout: left sidebar with quick filters and goals, main canvas for charts. Use cards for KPIs.",
+    "Use plotly dark template + colors from theme_tokens. Ensure hover labels use a light background for readability.",
+    "Icons: keep them small and tasteful in cards and axis labels. Avoid explicit sexual imagery; use a subtle personal icon for fap tracking."
+  ],
+  "final_output_requirements": {
+    "must_include": [
+      "A zip-ready repository project with the file structure above",
+      "A detailed README with screenshots (placeholder images ok) and how-to-run",
+      "Seed data for Sep 22–Dec 31, 2025",
+      "Unit tests and CI config"
+    ],
+    "format": "The agent should create actual files in the workspace, commit them with clear commit messages, and produce a short 'what I built' summary in the final agent message with run steps and any limitations or TODOs."
+  },
+  "agent_behavior_rules": [
+    "Do not prompt the user for clarifying questions — assume the defaults above.",
+    "If a third-party Streamlit component is used (FullCalendar embed), include fallback UI implemented purely in Streamlit forms in case the component fails to load.",
+    "Prioritize local, offline-first operation (SQLite + CSV). Cloud features are optional and gated behind settings.",
+    "When creating icons use inline SVG or link to Font Awesome CDN; do not add heavy image assets."
+  ],
+  "assistant_tone_for_text_in_app": "Confident, direct, slightly cheeky Gen Z voice. Use short lines of copy for UI microcopy (e.g., 'Logged. Nice.', 'Hydration check — you got this', 'Streak locked 🔒'). Keep language tasteful and non-judgmental for personal items (e.g., fap).",
+  "notes_for_reviewer": "If anything in the above is impossible in the agent environment, make a clear, short comment in the repo README explaining the limitation and provide a robust fallback implementation."
+}

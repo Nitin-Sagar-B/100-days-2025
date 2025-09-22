@@ -1,0 +1,13 @@
+streamlit
+pandas
+numpy
+plotly
+altair
+sqlalchemy
+python-dateutil
+streamlit-aggrid
+pytest
+requests
+black
+ruff
+isort
