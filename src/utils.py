@@ -21,3 +21,38 @@ def load_fontawesome() -> None:
         """,
         unsafe_allow_html=True,
     )
+
+
+def apply_theme_css() -> None:
+    """Inject CSS variables to enforce the custom dark theme on every page.
+
+    Streamlit pages are separate scripts; this ensures consistent theming
+    in local, Cloud, and mobile environments.
+    """
+    st.markdown(
+        """
+    <meta name="theme-color" content="#F7F5F2" />
+        <meta name="color-scheme" content="light dark" />
+        <style>
+        :root {
+            --primary-color: #FF8A5B;          /* Warm coral */
+            --accent-bright: #F2C94C;          /* Warm amber */
+            --background-color: #F7F5F2;       /* Warm off-white */
+            --secondary-background-color: #EFEAE4; /* Soft warm panel */
+            --text-color: #1C1A18;             /* Deep warm ink */
+            --font: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+        }
+        html, body, .stApp { background-color: var(--background-color) !important; color: var(--text-color) !important; }
+        body, .stApp, div, p, span, label { color: var(--text-color) !important; font-family: var(--font) !important; }
+        div[data-testid="stAppViewContainer"] { background-color: var(--background-color) !important; }
+        section[data-testid="stSidebar"] { background-color: var(--secondary-background-color) !important; }
+        section[data-testid="stSidebar"] * { color: var(--text-color) !important; }
+        div[data-testid="stHeader"] { background: transparent !important; }
+    .stButton>button, .stDownloadButton>button { background: var(--primary-color) !important; color: white !important; border: 0 !important; }
+    .stButton>button:hover, .stDownloadButton>button:hover { filter: brightness(0.95); box-shadow: 0 0 0 2px var(--accent-bright)33 inset; }
+        .stTabs [data-baseweb="tab"] { color: var(--text-color) !important; }
+        [data-testid="stMarkdownContainer"] * { color: var(--text-color) !important; }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )

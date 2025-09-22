@@ -5,9 +5,11 @@ from datetime import date
 from src.repo import init_db, to_dataframe
 from src.analytics import add_rolling, composite_score
 from src.charts import kpi_sparkline, time_series, calendar_heatmap
+from src.utils import apply_theme_css
 
 st.set_page_config(page_title="Dashboard", page_icon="🏠", layout="wide")
 init_db()
+apply_theme_css()
 
 st.title("Dashboard")
 

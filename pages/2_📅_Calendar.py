@@ -3,11 +3,13 @@ from datetime import date, datetime
 
 import pandas as pd
 import streamlit as st
+from src.utils import apply_theme_css
 
 from src.repo import init_db, to_dataframe, upsert_day, get_day, delete_day
 
 st.set_page_config(page_title="Calendar", page_icon="📅", layout="wide")
 init_db()
+apply_theme_css()
 
 st.title("Calendar")
 

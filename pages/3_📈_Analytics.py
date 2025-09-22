@@ -1,4 +1,5 @@
 import streamlit as st
+from src.utils import apply_theme_css
 import pandas as pd
 from src.repo import init_db, to_dataframe
 from src.analytics import add_rolling, weekly_breakdown, correlation_matrix, compute_streak
@@ -6,6 +7,7 @@ from src.charts import time_series
 
 st.set_page_config(page_title="Analytics", page_icon="📈", layout="wide")
 init_db()
+apply_theme_css()
 
 st.title("Analytics")
 

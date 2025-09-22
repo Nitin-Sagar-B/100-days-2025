@@ -1,4 +1,5 @@
 import streamlit as st
+from src.utils import apply_theme_css
 from datetime import date
 from pathlib import Path
 import pandas as pd
@@ -7,6 +8,7 @@ from src.repo import init_db, to_dataframe, export_csv, export_json, import_csv,
 
 st.set_page_config(page_title="Data & Export", page_icon="🗄️", layout="wide")
 init_db()
+apply_theme_css()
 
 st.title("Data & Export")
 
