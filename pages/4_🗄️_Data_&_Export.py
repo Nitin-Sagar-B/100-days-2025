@@ -3,7 +3,7 @@ from datetime import date
 from pathlib import Path
 import pandas as pd
 
-from src.repo import init_db, to_dataframe, export_csv, export_json, import_csv, weekly_auto_backup
+from src.repo import init_db, to_dataframe, export_csv, export_json, import_csv, weekly_auto_backup, delete_day
 
 st.set_page_config(page_title="Data & Export", page_icon="🗄️", layout="wide")
 init_db()
@@ -50,3 +50,14 @@ if backup_files:
             st.error(str(e))
 else:
     st.caption("No backups found yet. Create one above.")
+
+st.subheader("Delete a day")
+if not df.empty:
+    dsel = st.selectbox("Pick date to delete", df["date"].dt.date.tolist())
+    if st.button("Delete selected day", type="secondary"):
+        if delete_day(dsel):
+            st.success(f"Deleted {dsel}")
+        else:
+            st.info("That date wasn't in the database.")
+else:
+    st.caption("No rows to delete yet.")

@@ -66,6 +66,22 @@ def upsert_day(payload: dict) -> None:
             instance.updated_at = now
 
 
+def get_day(d: date) -> Optional[DailyMetrics]:
+    """Return a single day's record or None."""
+    with session_scope() as s:
+        return s.get(DailyMetrics, d)
+
+
+def delete_day(d: date) -> bool:
+    """Delete a day's record. Returns True if deleted, False if not found."""
+    with session_scope() as s:
+        obj = s.get(DailyMetrics, d)
+        if obj is None:
+            return False
+        s.delete(obj)
+        return True
+
+
 def get_between(start: date, end: date) -> List[DailyMetrics]:
     with session_scope() as s:
         res = s.execute(select(DailyMetrics).where(DailyMetrics.date.between(start, end))).scalars()
