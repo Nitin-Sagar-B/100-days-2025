@@ -11,7 +11,7 @@ init_db()
 st.title("Data & Export")
 
 df = to_dataframe()
-st.dataframe(df, use_container_width=True)
+st.dataframe(df, width="stretch")
 
 col1, col2, col3 = st.columns(3)
 with col1:

@@ -12,7 +12,7 @@ init_db()
 st.title("Calendar")
 
 # Simple month grid with day-click selection
-today = date(2025, 9, 22)
+today = date.today()
 year = st.selectbox("Year", [2025], index=0)
 month = st.selectbox(
     "Month",
@@ -78,4 +78,4 @@ st.caption("Day-click calendar grid provided. If an advanced component is needed
 
 df = to_dataframe()
 if not df.empty:
-    st.dataframe(df.tail(10), use_container_width=True)
+    st.dataframe(df.tail(10), width="stretch")

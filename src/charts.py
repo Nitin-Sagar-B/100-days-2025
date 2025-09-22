@@ -30,12 +30,15 @@ def time_series(df: pd.DataFrame, y_cols: list[str]) -> go.Figure:
 
 def calendar_heatmap(df: pd.DataFrame, values: pd.Series) -> go.Figure:
     # Simple heatmap by day index (fallback to visual calendar look)
-    if df.empty:
+    if df.empty or values is None or len(values) == 0:
         return go.Figure()
     x = df.copy()
+    # align values with df index and give it a stable column name
+    col = values.name or "value"
+    x[col] = values.values
     x["dow"] = x["date"].dt.weekday
     x["week"] = x["date"].dt.isocalendar().week
-    pivot = x.pivot_table(index="dow", columns="week", values=values.name, aggfunc="mean")
+    pivot = x.pivot_table(index="dow", columns="week", values=col, aggfunc="mean")
     fig = px.imshow(pivot, aspect="auto", color_continuous_scale="Viridis")
     fig.update_layout(template="plotly_dark", coloraxis_showscale=True)
     fig.update_yaxes(title="Day of Week")

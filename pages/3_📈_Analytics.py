@@ -20,15 +20,23 @@ df = add_rolling(df)
 col1, col2 = st.columns(2)
 with col1:
     st.subheader("Rolling averages (prod hours)")
-    st.plotly_chart(time_series(df, ["productive_hours", "prod_7", "prod_30"]))
+    st.plotly_chart(time_series(df, ["productive_hours", "prod_7", "prod_30"]), width="stretch")
 with col2:
     st.subheader("Weekly breakdown")
     weekly = weekly_breakdown(df)
-    st.dataframe(weekly, use_container_width=True)
+    st.dataframe(weekly, width="stretch")
 
 st.subheader("Correlations")
+from plotly import express as px
+import numpy as np
+
 corr = correlation_matrix(df)
-st.dataframe(corr.style.background_gradient(cmap="viridis"), use_container_width=True)
+if not corr.empty:
+    fig = px.imshow(corr.values, x=corr.columns, y=corr.columns, color_continuous_scale="Viridis")
+    fig.update_layout(template="plotly_dark")
+    st.plotly_chart(fig, width="stretch")
+else:
+    st.caption("No data for correlations yet.")
 
 st.subheader("Streaks")
 st.metric("Current streak (days)", compute_streak(df))
@@ -38,4 +46,4 @@ if "weight_kg" in df.columns:
     w = df[["date", "weight_kg"]].dropna().copy()
     if not w.empty:
         w["weight_ma7"] = w["weight_kg"].rolling(7, min_periods=1).mean()
-        st.plotly_chart(time_series(w, ["weight_kg", "weight_ma7"]))
+    st.plotly_chart(time_series(w, ["weight_kg", "weight_ma7"]), width="stretch")
