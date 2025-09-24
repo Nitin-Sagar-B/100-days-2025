@@ -11,3 +11,5 @@ requests
 black
 ruff
 isort
+gspread
+google-auth
